@@ -1,0 +1,12 @@
+resource "aws_instance" "name" {
+  ami = "ami-0c803b171269e2d72"
+  instance_type = "t2.nano"
+  key_name = "bujjiKey"
+  tags = {
+    
+    Name="day-5"
+  }
+}
+
+
+
