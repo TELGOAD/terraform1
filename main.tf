@@ -4,7 +4,7 @@ resource "aws_instance" "name" {
   key_name = "bujjiKey"
   tags = {
     
-    Name="day-5"
+    Name="day-51"
   }
 }
 
