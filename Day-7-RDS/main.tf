@@ -6,31 +6,31 @@ resource "aws_vpc" "custom_vpc" {
   }
 }
 
-resource "aws_subnet" "custom_subnet1" {
+resource "aws_subnet" "custom_subnet12" {
   vpc_id            = aws_vpc.custom_vpc.id
-  cidr_block        = "10.0.0.0/24"
+  cidr_block        = "10.0.0.0/27"
   availability_zone = "us-east-2a"
 
   tags = {
-    Name = "customSubnet1"
+    Name = "customSubnet12"
   }
 }
 
-resource "aws_subnet" "custom_subnet2" {
+resource "aws_subnet" "custom_subnet22" {
   vpc_id            = aws_vpc.custom_vpc.id
-  cidr_block        = "10.0.1.0/24"
+  cidr_block        = "10.0.1.0/27"
   availability_zone = "us-east-2b"
 
   tags = {
-    Name = "customSubnet2"
+    Name = "customSubnet22"
   }
 }
 
 resource "aws_db_subnet_group" "sub_grp" {
-  name       = "mycutsubnet"
+  name = "mycutsubnet22"
   subnet_ids = [
-    aws_subnet.custom_subnet1.id,
-    aws_subnet.custom_subnet2.id
+    aws_subnet.custom_subnet12.id,
+    aws_subnet.custom_subnet22.id
   ]
 
   tags = {
@@ -44,7 +44,7 @@ resource "aws_secretsmanager_secret" "rds_secret" {
 }
 
 resource "aws_secretsmanager_secret_version" "rds_secret_version" {
-  secret_id     = aws_secretsmanager_secret.rds_secret.id
+  secret_id = aws_secretsmanager_secret.rds_secret.id
   secret_string = jsonencode({
     username = "admin"
     password = "Cloud123"
@@ -55,32 +55,32 @@ resource "aws_secretsmanager_secret_version" "rds_secret_version" {
 }
 
 
-# data "aws_secretsmanager_secret" "rds_secret" {
-#   name = "book-rds-secret"
-# }
+data "aws_secretsmanager_secret" "rds_secret" {
+  name = "dev-sercrets"
+}
 
-# data "aws_secretsmanager_secret_version" "rds_secret_version" {
-#   secret_id = data.aws_secretsmanager_secret.rds_secret.id
-# }
+data "aws_secretsmanager_secret_version" "rds_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.rds_secret.id
+}
 
 resource "aws_db_instance" "default" {
-  identifier               = "book-rds"
-  allocated_storage        = 10
-  db_name                  = "mydb"
-  engine                   = "mysql"
-  engine_version           = "8.0"
-  instance_class           = "db.t3.micro"
-  username = jsondecode(aws_secretsmanager_secret_version.rds_secret_version.secret_string)["username"]
-  password = jsondecode(aws_secretsmanager_secret_version.rds_secret_version.secret_string)["password"]
+  identifier        = "book-rds1"
+  allocated_storage = 10
+  db_name           = "mydb"
+  engine            = "mysql"
+  engine_version    = "8.0"
+  instance_class    = "db.t3.micro"
+  username          = jsondecode(data.aws_secretsmanager_secret_version.rds_secret_version.secret_string)["username"]
+  password          = jsondecode(data.aws_secretsmanager_secret_version.rds_secret_version.secret_string)["password"]
 
-  db_subnet_group_name     = aws_db_subnet_group.sub_grp.name
-  parameter_group_name     = "default.mysql8.0"
-  backup_retention_period  = 7
-  backup_window            = "02:00-03:00"
-  maintenance_window       = "sun:04:00-sun:05:00"
-  deletion_protection      = true
-  skip_final_snapshot      = true
-  publicly_accessible      = false
+  db_subnet_group_name    = aws_db_subnet_group.sub_grp.name
+  parameter_group_name    = "default.mysql8.0"
+  backup_retention_period = 7
+  backup_window           = "02:00-03:00"
+  maintenance_window      = "sun:04:00-sun:05:00"
+  deletion_protection     = true
+  skip_final_snapshot     = true
+  publicly_accessible     = false
 
   depends_on = [aws_db_subnet_group.sub_grp]
 }

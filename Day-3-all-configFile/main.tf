@@ -10,10 +10,10 @@ resource "aws_instance" "name" {
 }
 
 
-resource "aws_instance" "name1"{
-    ami = var.amiId
-    instance_type = var.instanceType
-    tags={
-        Name="Day-5"
-    }
-}
+# resource "aws_instance" "name1"{
+#     ami = var.amiId
+#     instance_type = var.instanceType
+#     tags={
+#         Name="Day-5"
+#     }
+# }
