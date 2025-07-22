@@ -9,8 +9,8 @@ resource "aws_instance" "name" {
   availability_zone = var.az
 }
 
-resource "aws_s3_bucket" "name"{
-    bucket = var.bucketName
-}
+# resource "aws_s3_bucket" "name"{
+#     bucket = var.bucketName
+# }
 
 

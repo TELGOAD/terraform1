@@ -22,7 +22,7 @@ variable "az"{
     type = string
 }
 
-variable "bucketName"{
-    type = string
-    #default = "dhfadkjfhlkj"
-}
+# variable "bucketName"{
+#     type = string
+#     #default = "dhfadkjfhlkj"
+# }
