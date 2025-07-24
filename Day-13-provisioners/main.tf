@@ -158,7 +158,7 @@ resource "null_resource" "run_script" {
     }
 
     inline = [
-      "echo 'hello from awsdevops' >> /home/ubuntu/file200"
+      "echo 'hello from awsdevopsadafad' >> /home/ubuntu/file200"
     ]
   }
 
